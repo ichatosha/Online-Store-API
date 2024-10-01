@@ -1,0 +1,58 @@
+﻿using Store.Core.Entities;
+using Store.Core.Repositories.Contract;
+using Store.Repository.Data.Contexts;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Store.Repository.Repositories
+{
+    public class GenericRepository<TEntity, TKey> : IGenericRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
+    {
+        private readonly StoreDbContext _context;
+        public GenericRepository(StoreDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        {
+            if(typeof(TEntity) == typeof(Product))
+            { 
+                // Must casting from genericList to Ienumerable because it return genericList and the base func return IEnumerable
+                return (IEnumerable<TEntity>) await _context.Products.Include(P => P.Type).Include(P => P.Brand).ToListAsync();
+            }
+            return await _context.Set<TEntity>().ToListAsync();
+        }
+
+        public async Task<TEntity> GetByIdAsync(TKey id)
+        {
+            if(typeof(TEntity) == typeof(Product))
+            {
+                // Must casting here [Force] : 
+                return  await _context.Products.Include(P => P.Type).Include(P => P.Brand).FirstOrDefaultAsync(P => P.Id == id as int?) as TEntity; // (Id) here is int and (id) here is Entity
+            }
+            return await _context.Set<TEntity>().FindAsync(id);
+        }
+
+        public async Task AddAsync(TEntity entity)
+        {
+             await _context.AddAsync(entity);
+        }
+
+        public  void UpdateAsync(TEntity entity)
+        {
+            _context.Update(entity);
+        }
+
+        public void DeleteAsync(TEntity entity)
+        {
+            _context.Remove(entity);
+        }
+
+
+    }
+}
