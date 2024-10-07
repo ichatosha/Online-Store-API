@@ -12,7 +12,7 @@ namespace Store.Core.Services.Contract
     public interface IProductService
     {
 
-        Task<IEnumerable<ProductDto>> GetAllProductsAsync(); 
+        Task<IEnumerable<ProductDto>> GetAllProductsAsync(string? sort , int? brandId , int? typeId); 
 
         Task<IEnumerable<TypesAndBrandsDto>> GetAllTypesAsync();
 

@@ -16,10 +16,40 @@ namespace Store.Controllers
         }
 
         [HttpGet] // [Get] BaseUrl/api/Products(Controller name)  << EndPoint
-        public async Task<IActionResult> GetAllProducts()
+        public async Task<IActionResult> GetAllProducts([FromQuery] string? sort , [FromQuery] int? brandId , [FromQuery] int? typeId)
         {
-           var result = await _productService.GetAllProductsAsync();
+           var result = await _productService.GetAllProductsAsync(sort, brandId , typeId);
             return Ok(result); // 200
+        }
+
+        [HttpGet("Brands")] // [Get] BaseUrl/api/Products/Brands(Controller name)  << EndPoint
+        public async Task<IActionResult> GetAllBrands()
+        {
+            var result = await _productService.GetAllBrandsAsync();
+            return Ok(result);
+        }
+
+        [HttpGet("Types")] // [Get] BaseUrl/api/Products/Types(Controller name)  << EndPoint
+        public async Task<IActionResult> GetAllTypes()
+        {
+            var result = await _productService.GetAllTypesAsync();
+            return Ok(result);
+        }
+
+        [HttpGet("{id}")] // [Get] BaseUrl/api/Products(Controller name)  << EndPoint
+        public async Task<IActionResult> GetProductById(int? id)
+        {
+            if(id is null)
+            {
+                return BadRequest("Invalid Id !");
+            }
+            var result = await _productService.GetProductById(id.Value);
+            if(result is null)
+            {
+                return NotFound("This product is not found!");
+            }
+            return Ok(result);
+
         }
 
 

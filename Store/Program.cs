@@ -33,7 +33,7 @@ namespace Store
 
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
-            builder.Services.AddAutoMapper(M => M.AddProfile(new ProductProfile()));
+            builder.Services.AddAutoMapper(M => M.AddProfile(new ProductProfile(builder.Configuration)));
 
 
             var app = builder.Build();
@@ -61,6 +61,9 @@ namespace Store
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            // use to allow static file in response : like images to show it in response body 
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 

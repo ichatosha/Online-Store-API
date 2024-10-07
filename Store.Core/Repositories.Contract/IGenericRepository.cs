@@ -1,4 +1,5 @@
 ﻿using Store.Core.Entities;
+using Store.Core.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,11 @@ namespace Store.Core.Repositories.Contract
 
         void DeleteAsync(TEntity entity);
 
+        // With Specifications :
 
+        Task<IEnumerable<TEntity>> GetAllWithSpecificationsAsync(ISpecifications<TEntity, TKey> specifications);
+
+        Task<TEntity> GetByIdWithSpecificationsAsync(ISpecifications<TEntity, TKey> specifications);
     }
 
 }

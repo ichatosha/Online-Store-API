@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Store.Core.Specifications;
 
 namespace Store.Repository.Repositories
 {
@@ -33,7 +34,7 @@ namespace Store.Repository.Repositories
             if(typeof(TEntity) == typeof(Product))
             {
                 // Must casting here [Force] : 
-                return  await _context.Products.Include(P => P.Type).Include(P => P.Brand).FirstOrDefaultAsync(P => P.Id == id as int?) as TEntity; // (Id) here is int and (id) here is Entity
+                return  await _context.Products.Where(P => P.Id == id as int?).Include(P => P.Type).Include(P => P.Brand).FirstOrDefaultAsync(P => P.Id == id as int?) as TEntity; // (Id) here is int and (id) here is Entity
             }
             return await _context.Set<TEntity>().FindAsync(id);
         }
@@ -51,6 +52,29 @@ namespace Store.Repository.Repositories
         public void DeleteAsync(TEntity entity)
         {
             _context.Remove(entity);
+        }
+
+
+        // With Specifications :
+        // To List 
+        public async Task<IEnumerable<TEntity>> GetAllWithSpecificationsAsync(ISpecifications<TEntity, TKey> specifications)
+        {
+
+           return await ApplySpec(specifications).ToListAsync();
+
+        }
+        // First Or Default 
+        public async Task<TEntity> GetByIdWithSpecificationsAsync(ISpecifications<TEntity, TKey> specifications)
+        {
+            return await ApplySpec(specifications).FirstOrDefaultAsync();
+        }
+
+        // to less the repeat the same Code : >> Refactoring <<
+        // SpecificationEvaluator<TEntity,TKey>.GetQuery(_context.Set<TEntity>() , specifications) 
+
+        private IQueryable<TEntity> ApplySpec(ISpecifications<TEntity, TKey> specifications)
+        {
+            return SpecificationEvaluator<TEntity, TKey>.GetQuery(_context.Set<TEntity>(), specifications);
         }
 
 
