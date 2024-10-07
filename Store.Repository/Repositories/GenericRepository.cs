@@ -77,6 +77,10 @@ namespace Store.Repository.Repositories
             return SpecificationEvaluator<TEntity, TKey>.GetQuery(_context.Set<TEntity>(), specifications);
         }
 
+        public async Task<int> GetCountAsync(ISpecifications<TEntity, TKey> specifications)
+        {
 
+            return await ApplySpec(specifications).CountAsync();
+        }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Store.Core.Dtos;
 using Store.Core.Dtos.Products;
 using Store.Core.Entities;
+using Store.Core.ResponseStyle;
+using Store.Core.Specifications.Products;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +14,7 @@ namespace Store.Core.Services.Contract
     public interface IProductService
     {
 
-        Task<IEnumerable<ProductDto>> GetAllProductsAsync(string? sort , int? brandId , int? typeId); 
+        Task<PaginationResponse<ProductDto>> GetAllProductsAsync(ProductSpecParams productSpecParams); 
 
         Task<IEnumerable<TypesAndBrandsDto>> GetAllTypesAsync();
 

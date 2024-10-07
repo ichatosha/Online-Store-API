@@ -3,6 +3,7 @@ using Store.Core;
 using Store.Core.Dtos;
 using Store.Core.Dtos.Products;
 using Store.Core.Entities;
+using Store.Core.ResponseStyle;
 using Store.Core.Services.Contract;
 using Store.Core.Specifications.Products;
 using Store.Repository.Data.Contexts;
@@ -25,11 +26,20 @@ namespace Store.Service.Services.Products
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync(string? sort, int? brandId, int? typeId)
+        public async Task<PaginationResponse<ProductDto>> GetAllProductsAsync(ProductSpecParams productSpecParams)
         {
-            var spec = new ProductSpec(sort,brandId, typeId);
+            var spec = new ProductSpec(productSpecParams);
             // convert to ProductDto
-            return _mapper.Map<IEnumerable<ProductDto>>(await _unitOfWork.Repository<Product, int>().GetAllWithSpecificationsAsync(spec));
+            var products  = await _unitOfWork.Repository<Product , int>().GetAllWithSpecificationsAsync(spec);
+
+            var mappedProducts = _mapper.Map<IEnumerable<ProductDto>>(products);
+            
+            // create a class has only Filteration and create new object from it :
+            var countSpec = new ProductWithCountSpec(productSpecParams);
+            
+            var count = await _unitOfWork.Repository<Product, int>().GetCountAsync(countSpec);
+            
+            return new PaginationResponse<ProductDto>(productSpecParams.PageSize, productSpecParams.PageIndex ,count , mappedProducts);
         }
 
         public async Task<ProductDto> GetProductById(int id)

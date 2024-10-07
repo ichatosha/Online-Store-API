@@ -9,7 +9,7 @@ namespace Store.Core.Specifications.Products
 {
     public class ProductSpec : BaseSpecification<Product, int>
     {
-        
+
         // this ctor is getting the one product by id
         public ProductSpec(int id) : base(P => P.Id == id)
         {
@@ -17,20 +17,20 @@ namespace Store.Core.Specifications.Products
         }
 
         // this ctor getting the all product 
-        public ProductSpec(string? sort, int? brandId, int? typeId) : base(
-            
-            // !hasvalue because to sure if any logic is false it will run the other statment >> Opposite Logic 
-            P => 
-            (!brandId.HasValue || brandId.Value == P.BrandId) 
-            &&
-            (!typeId.HasValue || typeId.Value == P.TypeId)
-            )
+        public ProductSpec(ProductSpecParams productSpecParams) : base(
+
+              // !hasvalue because to sure if any logic is false it will run the other statment >> Opposite Logic 
+              P =>
+              (!productSpecParams.BrandId.HasValue || productSpecParams.BrandId == P.BrandId)
+              &&
+              (!productSpecParams.TypeId.HasValue || productSpecParams.TypeId == P.TypeId)
+              )
         {
 
             // the sorting can by name and price asec and desc: +
-            if (!string.IsNullOrEmpty(sort))
+            if (!string.IsNullOrEmpty(productSpecParams.Sort))
             {
-                switch(sort)
+                switch (productSpecParams.Sort)
                 {
                     case "priceAsec":
                         OrderByAsec = P => P.Price;
@@ -38,8 +38,8 @@ namespace Store.Core.Specifications.Products
                     case "priceDesc":
                         OrderByDesc = P => P.Price;
                         break;
-                    default: 
-                        OrderByAsec = P => P.Name; 
+                    default:
+                        OrderByAsec = P => P.Name;
                         break;
                 }
             }
@@ -47,8 +47,15 @@ namespace Store.Core.Specifications.Products
             {
                 OrderByAsec = P => P.Name;
             }
-            applyIncludes(); 
+            applyIncludes();
+
+
+            // Page Size    :
+            // Page Index   : 
+            ApplyPangination(productSpecParams.PageSize * (productSpecParams.PageIndex - 1), productSpecParams.PageSize);
+
         }
+
 
 
         private void applyIncludes()

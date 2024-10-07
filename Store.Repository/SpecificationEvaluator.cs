@@ -32,6 +32,11 @@ namespace Store.Repository
                 query = query.OrderByDescending(specifications.OrderByDesc);
             }
 
+            if(specifications.IsPaginationEnabled)
+            {
+                query = query.Skip(specifications.Skip).Take(specifications.Take);
+            }
+
             query = specifications.Includes.Aggregate(query,(currentQuery, IncludeQuery) => currentQuery.Include(IncludeQuery));
 
             return query;

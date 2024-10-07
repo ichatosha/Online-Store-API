@@ -15,6 +15,10 @@ namespace Store.Core.Repositories.Contract
 
         Task<TEntity> GetByIdAsync(TKey id);
 
+        // to get count Entities in response :
+        Task<int> GetCountAsync(ISpecifications<TEntity, TKey> specifications);
+
+
         Task AddAsync(TEntity entity);
 
         void UpdateAsync(TEntity entity);

@@ -18,9 +18,15 @@ namespace Store.Core.Specifications
 
         public Expression<Func<TEntity, object>> OrderByDesc  { get; set; }
 
+        public int Take { get; set; }
+
+        public int Skip { get; set; }
+
+        public bool IsPaginationEnabled { get; set; }
 
 
 
     }
+
         // _context.Products.Where(P => P.Id == id as int?).Include(P => P.Type).Include(P => P.Brand).FirstOrDefaultAsync(P => P.Id == id as int?) as TEntity;
 }

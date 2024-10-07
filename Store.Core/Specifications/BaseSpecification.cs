@@ -16,7 +16,14 @@ namespace Store.Core.Specifications
 
 
         public Expression<Func<TEntity, object>> OrderByAsec { get; set; } = null;
+
         public Expression<Func<TEntity, object>> OrderByDesc { get; set; } = null;
+        
+        public int Take { get; set; }
+        
+        public int Skip { get; set; }
+        
+        public bool IsPaginationEnabled { get; set; }
 
         // if the code has filter then it will use this : 
         public BaseSpecification(Expression<Func<TEntity, bool>> expression)
@@ -27,6 +34,13 @@ namespace Store.Core.Specifications
         public BaseSpecification()
         {
             // Empty to use it without Filteratoin = Where
+        }
+
+        public void ApplyPangination(int skip , int take)
+        {
+            IsPaginationEnabled = true;
+            Skip = skip;
+            Take = take;
         }
 
     }
