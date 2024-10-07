@@ -21,6 +21,9 @@ namespace Store.Core.Specifications.Products
 
               // !hasvalue because to sure if any logic is false it will run the other statment >> Opposite Logic 
               P =>
+              // if search is null it will go to next line ,, and if false will run search :
+              (string.IsNullOrEmpty(productSpecParams.Search) || P.Name.ToLower().Contains(productSpecParams.Search))
+              &&
               (!productSpecParams.BrandId.HasValue || productSpecParams.BrandId == P.BrandId)
               &&
               (!productSpecParams.TypeId.HasValue || productSpecParams.TypeId == P.TypeId)

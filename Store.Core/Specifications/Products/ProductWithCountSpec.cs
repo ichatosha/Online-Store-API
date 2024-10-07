@@ -16,6 +16,8 @@ namespace Store.Core.Specifications.Products
 
                 // get the number of products that match these conditions to put in in Count var
               P =>
+              (string.IsNullOrEmpty(productSpecParams.Search) || P.Name.ToLower().Contains(productSpecParams.Search))
+              &&
               (!productSpecParams.BrandId.HasValue || productSpecParams.BrandId == P.BrandId)
               &&
               (!productSpecParams.TypeId.HasValue || productSpecParams.TypeId == P.TypeId)
