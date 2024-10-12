@@ -2,10 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Store.Core;
 using Store.Core.AutoMapping.Products;
+using Store.Core.Repositories.Contract;
 using Store.Core.Services.Contract;
 using Store.Repository;
 using Store.Repository.Data;
 using Store.Repository.Data.Contexts;
+using Store.Repository.Repositories;
 using Store.Service.Services.Products;
 
 namespace Store
@@ -30,11 +32,12 @@ namespace Store
                 options.UseSqlServer(connectionString);
             });
 
-
+            // DI
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
             builder.Services.AddAutoMapper(M => M.AddProfile(new ProductProfile(builder.Configuration)));
-
+            builder.Services.AddScoped<IBasketRepository,BasketRepository>();
+            ///////// add sigleton multiplexer ......
 
             var app = builder.Build();
 
