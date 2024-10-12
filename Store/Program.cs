@@ -4,12 +4,16 @@ using Store.Core;
 using Store.Core.AutoMapping.Products;
 using Store.Core.Repositories.Contract;
 using Store.Core.Services.Contract;
+using Store.Helper;
 using Store.Repository;
 using Store.Repository.Data;
 using Store.Repository.Data.Contexts;
 using Store.Repository.Repositories;
 using Store.Service.Services.Products;
 
+
+#region The Old One 
+/*
 namespace Store
 {
     public class Program
@@ -79,3 +83,30 @@ namespace Store
         }
     }
 }
+*/
+#endregion
+
+
+#region The New One
+namespace Store
+{
+    public class Program
+    {
+        public static async Task Main(string[] args)
+        {
+            // refactor everything before Build Function : 
+            var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddControllers();
+            // Add services to the container.
+            builder.Services.AddDependencyCallInProgram(builder.Configuration);
+
+            var app = builder.Build();
+
+            await app.ConfigureMiddlewareAsync();
+
+            app.Run();
+        }
+    }
+}
+#endregion

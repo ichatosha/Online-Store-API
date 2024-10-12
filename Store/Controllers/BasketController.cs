@@ -6,7 +6,7 @@ using Store.Core.Repositories.Contract;
 
 namespace Store.Controllers
 {
-    public class BasketController : ControllerBase
+    public class BasketController : BaseApiController
     {
 
         private readonly IBasketRepository _basketRepository;
