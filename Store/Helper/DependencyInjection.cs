@@ -9,6 +9,7 @@ using Store.Repository;
 using Store.Service.Services.Products;
 using StackExchange.Redis;
 using Store.Core.AutoMapping.Basket;
+using Store.Service.Caches;
 
 namespace Store.Helper
 { 
@@ -43,6 +44,8 @@ namespace Store.Helper
         private static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICacheService, CacheService>();
+
             return services;
         }
 

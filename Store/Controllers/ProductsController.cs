@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Store.Attributes;
 using Store.Core.Services.Contract;
 using Store.Core.Specifications.Products;
 
@@ -17,6 +18,7 @@ namespace Store.Controllers
         }
 
         [HttpGet] // [Get] BaseUrl/api/Products(Controller name)  << EndPoint
+        [Cache(100)]
         public async Task<IActionResult> GetAllProducts([FromQuery] ProductSpecParams productSpecParams)
         {
            var result = await _productService.GetAllProductsAsync(productSpecParams);
