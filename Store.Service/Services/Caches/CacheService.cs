@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Store.Service.Caches
+namespace Store.Service.Services.Caches
 {
     public class CacheService : ICacheService
     {

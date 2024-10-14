@@ -9,11 +9,17 @@ using Store.Repository;
 using Store.Service.Services.Products;
 using StackExchange.Redis;
 using Store.Core.AutoMapping.Basket;
-using Store.Service.Caches;
+using Store.Repository.Identity.Contexts;
+using Store.Core.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
+using Store.Repository.Identity;
+using Store.Service.Services.Caches;
+using Store.Service.Services.Tokens;
+using Store.Service.Services.User;
 
 namespace Store.Helper
-{ 
-        //  Before Build :  
+{
+    //  Before Build :  
     public static class DependencyInjection
     {
 
@@ -26,7 +32,7 @@ namespace Store.Helper
             services.AddAutoMapperProfile(configuration);
             services.AddSwagger(); 
             services.AddRedisService(configuration);
-
+            services.AddIdentityServices();
             return services;
         }
 
@@ -37,7 +43,13 @@ namespace Store.Helper
                 var connectionString = configuration.GetConnectionString("DefaultConnection");
                 options.UseSqlServer(connectionString);
             });
-
+            
+            services.AddDbContext<StoreIdentityDBContext>(options =>
+            {
+                var connectionString = configuration.GetConnectionString("IdentityConnection");
+                options.UseSqlServer(connectionString);
+            });
+             
             return services;
         }
 
@@ -45,6 +57,9 @@ namespace Store.Helper
         {
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICacheService, CacheService>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IUserService, UserService>();
+           
 
             return services;
         }
@@ -87,5 +102,16 @@ namespace Store.Helper
 
             return services;
         }
+
+        // allow DI for all identity built in services : 
+        private static IServiceCollection AddIdentityServices(this IServiceCollection services)
+        {
+            services.AddIdentity<AppUser, IdentityRole>()
+                .AddEntityFrameworkStores<StoreIdentityDBContext>();
+
+
+            return services;
+        }
+
     }
 }

@@ -6,6 +6,10 @@ using Store.Repository.Data.Contexts;
 using Store.Repository.Repositories;
 using Store.Service.Services.Products;
 using Store.Repository.Data;
+using Store.Repository.Identity.Contexts;
+using Store.Repository.Identity;
+using Microsoft.AspNetCore.Identity;
+using Store.Core.Entities.Identity;
 
 namespace Store.Helper
 {
@@ -17,13 +21,19 @@ namespace Store.Helper
         {
             using var scope = app.Services.CreateScope();
             var services = scope.ServiceProvider;
-            var context = services.GetRequiredService<StoreDbContext>();
+            var context = services.GetRequiredService<StoreDbContext>();  // ask CLR to create  object StoreDBContext
+            var contextIdentity = services.GetRequiredService<StoreIdentityDBContext>(); // ask CLR to create  object StoreIdentityDBContext
+            var userManager = services.GetRequiredService<UserManager<AppUser>>(); // ask CLR to create  object StoreIdentityDBContext
+
             var loggerFactory = services.GetRequiredService<ILoggerFactory>();
 
             try
             {
                 await context.Database.MigrateAsync();
                 await StoreDbContextSeed.SeedAsync(context);
+
+                await contextIdentity.Database.MigrateAsync();
+                await StoreIdentityDBContextSeed.SeedAppUserAsync(userManager);
             }
             catch (Exception ex)
             { 
