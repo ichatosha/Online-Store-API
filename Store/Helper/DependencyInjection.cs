@@ -16,6 +16,10 @@ using Store.Repository.Identity;
 using Store.Service.Services.Caches;
 using Store.Service.Services.Tokens;
 using Store.Service.Services.User;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Drawing.Imaging;
+using System.Text;
 
 namespace Store.Helper
 {
@@ -33,6 +37,7 @@ namespace Store.Helper
             services.AddSwagger(); 
             services.AddRedisService(configuration);
             services.AddIdentityServices();
+            services.AddAuthenticationService(configuration);
             return services;
         }
 
@@ -112,6 +117,30 @@ namespace Store.Helper
 
             return services;
         }
+
+        // allow DI for authentication : 
+        private static IServiceCollection AddAuthenticationService(this IServiceCollection services , IConfiguration configuration)
+        {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = configuration["Jwt:Issuer"],
+                    ValidateAudience = true,
+                    ValidAudience = configuration["Jwt:Audience"],
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+                };
+            });
+            return services;
+        } 
+
 
     }
 }

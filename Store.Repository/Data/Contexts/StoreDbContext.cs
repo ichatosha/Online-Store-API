@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 using Store.Core.Entities;
+using Store.Core.Entities.Order;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +31,16 @@ namespace Store.Repository.Data.Contexts
 
 
         public DbSet<ProductType> Types { get; set; }
+
+        public DbSet<OrderO> Orders { get; set; }
+
+        public DbSet<OrderItem> OrederItems { get; set; }
+
+        public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
+
+
+
+
 
     }
 }

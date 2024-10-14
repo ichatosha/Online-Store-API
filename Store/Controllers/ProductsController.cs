@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Store.Attributes;
 using Store.Core.Services.Contract;
@@ -18,7 +19,8 @@ namespace Store.Controllers
         }
 
         [HttpGet] // [Get] BaseUrl/api/Products(Controller name)  << EndPoint
-        [Cache(100)]
+        [Cache(10)] // per days
+        [Authorize]
         public async Task<IActionResult> GetAllProducts([FromQuery] ProductSpecParams productSpecParams)
         {
            var result = await _productService.GetAllProductsAsync(productSpecParams);

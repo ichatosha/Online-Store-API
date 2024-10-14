@@ -58,6 +58,9 @@ namespace Store.Helper
             // Middleware for HTTPS redirection
             app.UseHttpsRedirection();
 
+            // Middleware for authintication 
+            app.UseAuthentication();
+
             // Middleware for authorization
             app.UseAuthorization();
 

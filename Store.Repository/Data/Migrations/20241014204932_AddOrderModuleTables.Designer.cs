@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Store.Repository.Data.Contexts;
 
@@ -11,9 +12,11 @@ using Store.Repository.Data.Contexts;
 namespace Store.Repository.Data.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    partial class StoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241014204932_AddOrderModuleTables")]
+    partial class AddOrderModuleTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,7 +80,7 @@ namespace Store.Repository.Data.Migrations
 
                     b.HasIndex("OrderOId");
 
-                    b.ToTable("OrederItems");
+                    b.ToTable("OrederIems");
                 });
 
             modelBuilder.Entity("Store.Core.Entities.Order.OrderO", b =>
@@ -224,7 +227,7 @@ namespace Store.Repository.Data.Migrations
 
                             b1.HasKey("OrderItemId");
 
-                            b1.ToTable("OrederItems");
+                            b1.ToTable("OrederIems");
 
                             b1.WithOwner()
                                 .HasForeignKey("OrderItemId");

@@ -9,7 +9,7 @@ namespace Store.Core.Dtos.Auth
     public class UserDto
     {
 
-        public string? Email { get; set; }
+        public string Email { get; set; }
 
         public string DisplayName { get; set; }
 

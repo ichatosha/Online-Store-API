@@ -1,4 +1,5 @@
 ﻿using Store.Core.Entities;
+using Store.Core.Entities.Order;
 using Store.Repository.Data.Contexts;
 using System;
 using System.Collections.Generic;
@@ -73,6 +74,24 @@ namespace Store.Repository.Data
                 }
             }
 
+
+            if (_context.DeliveryMethods.Count() == 0)
+            {
+                // delivery methods 
+                // 1. Read data from json file 
+                var deliveryData = File.ReadAllText(@"..\Store.Repository\Data\DataSeed\delivery.json");
+                // @"..\Store\Store.Repository\Data\DataSeed\Brands.json"
+
+                // Cponvert Json string To List<T>
+                var deliveryMethods = JsonSerializer.Deserialize<List<DeliveryMethod>>(deliveryData);
+
+                // Seed Data to database
+                if (deliveryMethods is not null)
+                {
+                    await _context.DeliveryMethods.AddRangeAsync(deliveryMethods);
+                    await _context.SaveChangesAsync();
+                }
+            }
 
         }
 
