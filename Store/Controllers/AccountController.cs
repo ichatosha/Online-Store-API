@@ -5,7 +5,6 @@ using Store.Core.Entities.Identity;
 using Store.Core.Services.Contract;
 using System.Security.Claims;
 using Store.Service.Services.User;
-using Store.Core.Repositories.Contract;
 using AutoMapper;
 using Store.Core.Dtos;
 using Store.Core;

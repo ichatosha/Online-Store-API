@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Drawing.Imaging;
 using System.Text;
+using Store.Core.AutoMapping.Orders;
 
 namespace Store.Helper
 {
@@ -64,6 +65,7 @@ namespace Store.Helper
             services.AddScoped<ICacheService, CacheService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IOrderService, IOrderService>();
            
 
             return services;
@@ -96,6 +98,7 @@ namespace Store.Helper
         {
             services.AddAutoMapper(M => M.AddProfile(new ProductProfile(configuration)));
             services.AddAutoMapper(M => M.AddProfile(new BasketProfile()));
+            services.AddAutoMapper(M => M.AddProfile(new OrderProfile(configuration)));
             return services;
 
         }

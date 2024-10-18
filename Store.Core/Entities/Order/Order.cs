@@ -8,6 +8,16 @@ namespace Store.Core.Entities.Order
 {
     public class OrderO : BaseEntity<int>
     {
+        public OrderO(string buyerEmail, Address shippingAddress, DeliveryMethod deliveryMethod, ICollection<OrderItem> orderItems, decimal subTotal, string paymentIntentId)
+        {
+            BuyerEmail = buyerEmail;
+            ShippingAddress = shippingAddress;
+            DeliveryMethod = deliveryMethod;
+            OrderItems = orderItems;
+            SubTotal = subTotal;
+            PaymentIntentId = paymentIntentId;
+        }
+
         public string BuyerEmail { get; set; }
 
         public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.UtcNow;
@@ -27,5 +37,10 @@ namespace Store.Core.Entities.Order
         public decimal GetTotal() => SubTotal+DeliveryMethod.Cost;
 
         public string PaymentIntentId { get; set; }
+
+        public object BuyerEmail1 { get; }
+
+        public object Value { get; }
+
     }
 }

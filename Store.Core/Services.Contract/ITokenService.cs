@@ -6,12 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Store.Core.Repositories.Contract
+namespace Store.Core.Services.Contract
 {
     public interface ITokenService
     {
 
-        Task<string> CreateTokenAsync(AppUser user , UserManager<AppUser> userManager);
+        Task<string> CreateTokenAsync(AppUser user, UserManager<AppUser> userManager);
 
     }
 }

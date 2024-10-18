@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Store.Core.Dtos.Auth;
 using Store.Core.Entities.Identity;
-using Store.Core.Repositories.Contract;
 using Store.Core.Services.Contract;
 using System;
 using System.Collections.Generic;

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Store.Core.Entities.Identity;
-using Store.Core.Repositories.Contract;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
+using Store.Core.Services.Contract;
 namespace Store.Service.Services.Tokens
 {
     public class TokenService : ITokenService
