@@ -9,14 +9,11 @@ namespace Store.Core.Services.Contract
 {
     public interface IBasketService
     {
-
         Task<CustomerBasketDto?> GetBasketAsync(string BasketId);
 
         Task <CustomerBasketDto?> UpdateBasketAsync(CustomerBasketDto basketDto);
 
-        Task<CustomerBasketDto?> DeleteBasketAsync(string basketId);
-
-
+        Task<bool?> DeleteBasketAsync(string basketId);
 
     }
 }

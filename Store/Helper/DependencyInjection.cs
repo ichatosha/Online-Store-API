@@ -21,13 +21,15 @@ using Microsoft.IdentityModel.Tokens;
 using System.Drawing.Imaging;
 using System.Text;
 using Store.Core.AutoMapping.Orders;
-
+using Store.Service.Services.Orders;
+using Store.Service.Services.Baskets;
+using Store.Service.Services.Payment;
+using Store.Service.Services.Coupons;
 namespace Store.Helper
 {
     //  Before Build :  
     public static class DependencyInjection
     {
-
         public static IServiceCollection AddDependencyCallInProgram (this IServiceCollection services , IConfiguration configuration)
         {
             services.AddDbContexts(configuration);
@@ -39,6 +41,7 @@ namespace Store.Helper
             services.AddRedisService(configuration);
             services.AddIdentityServices();
             services.AddAuthenticationService(configuration);
+            
             return services;
         }
 
@@ -65,14 +68,17 @@ namespace Store.Helper
             services.AddScoped<ICacheService, CacheService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IOrderService, IOrderService>();
-           
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IBasketService, BasketService>();
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<ICouponService, CouponService>();
 
             return services;
         }
 
         private static IServiceCollection AddRepositories(this IServiceCollection services)
         {
+            services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>)); // Add this line for generic repository registration
             services.AddScoped<IBasketRepository, BasketRepository>();
             return services;
         }

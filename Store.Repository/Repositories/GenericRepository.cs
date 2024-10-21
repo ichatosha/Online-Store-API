@@ -51,9 +51,13 @@ namespace Store.Repository.Repositories
 
         public void DeleteAsync(TEntity entity)
         {
+            if (entity is null)
+            {
+                throw new ArgumentNullException(nameof(entity), "Entity cannot be null");
+            }
             _context.Remove(entity);
         }
-
+         
 
         // With Specifications :
         // To List 

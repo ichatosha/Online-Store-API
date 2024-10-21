@@ -8,12 +8,17 @@ namespace Store.Core.Entities.Order
 {
     public class OrderO : BaseEntity<int>
     {
-        public OrderO(string buyerEmail, Address shippingAddress, DeliveryMethod deliveryMethod, ICollection<OrderItem> orderItems, decimal subTotal, string paymentIntentId)
+        public OrderO()
+        {
+
+        }
+
+        public OrderO(string buyerEmail, Address shippingAddress, DeliveryMethod deliveryMethodId, ICollection<OrderItem> orderItems, decimal subTotal, string paymentIntentId)
         {
             BuyerEmail = buyerEmail;
             ShippingAddress = shippingAddress;
-            DeliveryMethod = deliveryMethod;
-            OrderItems = orderItems;
+            DeliveryMethod = deliveryMethodId;
+            OrderItems = orderItems; 
             SubTotal = subTotal;
             PaymentIntentId = paymentIntentId;
         }
@@ -41,6 +46,5 @@ namespace Store.Core.Entities.Order
         public object BuyerEmail1 { get; }
 
         public object Value { get; }
-
     }
 }

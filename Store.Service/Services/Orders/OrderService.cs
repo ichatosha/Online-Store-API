@@ -12,6 +12,8 @@ using System.Text;
 using System.Threading.Tasks;
 using StackExchange.Redis;
 using Store.Core.Specifications;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace Store.Service.Services.Orders
 {
@@ -20,20 +22,28 @@ namespace Store.Service.Services.Orders
         private readonly IUnitOfWork _unitOfWork;
         private readonly IBasketService _basketService;
         private readonly IBasketRepository _basketRepository;
-        private readonly Core.Repositories.Contract.IGenericRepository<Product, int> _productRepo;
+        private readonly IGenericRepository<Product, int> _productRepo;
+        private readonly IPaymentService _paymentService;
+        private readonly IMapper _mapper;
 
-        public OrderService(IUnitOfWork unitOfWork ,IBasketService basketService ,IBasketRepository basketRepository , IGenericRepository<Product, int> productRepo)
+        public OrderService(IUnitOfWork unitOfWork,
+                            IBasketService basketService,
+                            IBasketRepository basketRepository,
+                            IGenericRepository<Product, int> productRepo,
+                            IPaymentService paymentService,
+                            IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _basketService = basketService;
             _basketRepository = basketRepository;
             _productRepo = productRepo;
+            _paymentService = paymentService;
+            _mapper = mapper;
         }
 
 
-
         public async Task<OrderO> CreateOrderAsync(string buyerEmail, string basketId, int deliveryMethodId, Address shippingAddress)
-        {
+         {
             var basket = await _basketService.GetBasketAsync(basketId);
             if (basket is null) return null;
 
@@ -58,8 +68,22 @@ namespace Store.Service.Services.Orders
             var subTotal = orderItems.Sum(I => I.Price *  I.Quantity);
 
 
-            // TODO...
-            var order = new OrderO(buyerEmail, shippingAddress,  deliveryMethod,orderItems , subTotal ,"" );
+            // payment:
+            if (string.IsNullOrEmpty(basket.PaymentIntentId))
+            {
+                var spec = new OrderSpecificationWithPaymentIntentId(basket.PaymentIntentId);
+                var ExOrder = await _unitOfWork.Repository<OrderO, int>().GetByIdWithSpecificationsAsync(spec);
+                if (ExOrder is null)
+                {
+                    throw new ArgumentNullException(nameof(ExOrder), "Cannot delete a non-existent entity");
+                }
+                _unitOfWork.Repository<OrderO, int>().DeleteAsync(ExOrder);
+            }
+            var payment = await _paymentService.CreateOrUpdatePaymentIntentIdAsync(basketId);
+
+            var order = new OrderO(buyerEmail, shippingAddress, deliveryMethod, orderItems , subTotal , payment.PaymentIntentId);
+
+            await _unitOfWork.Repository<OrderO,int>().AddAsync(order);
 
             var result = await _unitOfWork.CompleteAsync();
 
