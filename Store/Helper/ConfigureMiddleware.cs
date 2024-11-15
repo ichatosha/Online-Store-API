@@ -110,20 +110,15 @@ namespace Store.Helper
                 throw;
             }
 
-            // Middleware configuration
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger(); 
-                app.UseSwaggerUI();
-            }
-            else
-            {
-                if (!app.Environment.IsDevelopment())
-                {
-                    app.UseHttpsRedirection(); 
-                }
-            }
+            //// Middleware configuration
+            //if (app.Environment.IsDevelopment())
+            //{
+            //    app.UseSwagger(); 
+            //    app.UseSwaggerUI();
+            //}
 
+            app.UseSwagger();
+            app.UseSwaggerUI();
             app.UseStaticFiles(); 
 
             app.UseHttpsRedirection();

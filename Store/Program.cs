@@ -99,7 +99,6 @@ builder.Services.AddDependencyCallInProgram(builder.Configuration); // Custom DI
 // Add controllers
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(options =>
 {
     // Add metadata for API
