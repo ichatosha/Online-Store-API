@@ -10,6 +10,9 @@ using Store.Repository.Data;
 using Store.Repository.Data.Contexts;
 using Store.Repository.Repositories;
 using Store.Service.Services.Products;
+using Store.Repository.Identity.Contexts;
+using Microsoft.AspNetCore.Identity;
+using Store.Core.Entities.Identity;
 
 
 #region The Old One 
@@ -87,26 +90,40 @@ namespace Store
 #endregion
 
 
-#region The New One
-namespace Store
+#region Last One
+var builder = WebApplication.CreateBuilder(args);
+
+// Register dependencies
+builder.Services.AddDependencyCallInProgram(builder.Configuration); // Custom DI method
+
+// Add controllers
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
 {
-    public class Program
+    // Add metadata for API
+    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
     {
-        public static async Task Main(string[] args)
+        Title = "Blend Store API",
+        Version = "v1",
+        Description = "The Blend Store API enables customers to register, manage their accounts, add products to their cart, and place orders." +
+        " It supports CRUD operations on products, brands, and types, and facilitates secure payments through Stripe. " +
+        "This API serves as the backend for an e-commerce platform, providing an interface for managing orders, products, and payments with Stripe gateway.",
+        Contact = new Microsoft.OpenApi.Models.OpenApiContact
         {
-            // refactor everything before Build Function : 
-            var builder = WebApplication.CreateBuilder(args);
-
-            builder.Services.AddControllers();
-            // Add services to the container.
-            builder.Services.AddDependencyCallInProgram(builder.Configuration);
-
-            var app = builder.Build();
-
-            await app.ConfigureMiddlewareAsync();
-
-            app.Run();
+            Name = "HESHAM",  
+            Url = new Uri("https://www.linkedin.com/in/ichatosha/") 
         }
-    }
-}
+    });
+});
+// Build the application
+var app = builder.Build();
+
+// Configure middleware pipeline
+await app.ConfigureMiddlewareAsync(); 
+// Run the application
+app.Run();
+
+
 #endregion
